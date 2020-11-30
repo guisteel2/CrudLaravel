@@ -43,6 +43,38 @@ html, body {height:100%;}
     flex: 1;
 }
 
+.contender .login{
+    display: flex;
+    flex-direction: row;
+    flex: 1 100%;
+    flex-wrap: wrap;
+    height: 100%;
+  
+}
+
+.contender .login>div{
+    
+    flex-wrap: wrap;
+    margin: auto;
+    text-align: center;
+    width: 300px;
+}
+.contender .login>div:hover {
+    background-color: #5d344c;
+    border: 1px solid;
+    border-radius: 15px;
+  }
+
+  .contender .login>div:hover>form {
+    color: white;
+  }
+
+  .contender .login>div:hover .btn{
+    background-color: black;
+  }
+  .cadastro>h1{
+    color: white;
+  }
 
 .footer{
     display: flex;
@@ -61,4 +93,9 @@ html, body {height:100%;}
 .footer>div h1{
     font-size: 1.5rem;
     color:white;
+}
+
+.topaling .div{
+    flex-wrap: wrap;
+    margin: auto
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+
 Route::get('/', function () {
     return view('index');
 });
+//so para testa
+Route::get('/teste', function () {
+    return 'testes';
+});
+
+Route::get('/usuarios/{id?}', 'App\Http\Controllers\UsuariosController@index');
+Route::post('/usuarios/log', 'App\Http\Controllers\UsuariosController@log');
+
+Route::get('/cadastrar/usuario', 'App\Http\Controllers\UsuariosController@cadastrar');
