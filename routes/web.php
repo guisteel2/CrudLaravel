@@ -29,3 +29,6 @@ Route::get('/usuarios/{id?}', 'App\Http\Controllers\UsuariosController@index');
 Route::post('/usuarios/log', 'App\Http\Controllers\UsuariosController@log');
 
 Route::get('/cadastrar/usuario', 'App\Http\Controllers\UsuariosController@cadastrar');
+Route::post('/cadastrar/usuario',['as' => 'cadastro.cliente', 'uses' => 'App\Http\Controllers\UsuariosController@cadastrar']);
+
+

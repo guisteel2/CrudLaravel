@@ -76,6 +76,17 @@ html, body {height:100%;}
     color: white;
   }
 
+  .formdivs{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
+  .formdivs>div{
+    display: grid;
+    margin: 5px;
+  }
+
 .footer{
     display: flex;
     background-color: black;
