@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
+        'cliente_id',
         'email',
         'password',
     ];
@@ -27,6 +27,8 @@ class User extends Authenticatable
      *
      * @var array
      */
+
+     
     protected $hidden = [
         'password',
         'remember_token',
@@ -40,4 +42,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function ignore($user){
+        dd(Auth::user()->email);
+        if($user){
+
+        }
+
+    }
 }

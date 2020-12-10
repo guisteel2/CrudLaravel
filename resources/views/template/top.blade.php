@@ -1,11 +1,12 @@
 
     
-    <header class='Header'>
-    
-    <nav class='Menu navbar navbar-expand-lg'>
-        <a class="navbar-brand" href="/">LOGO</a>
-        <button class="navbar-toggler navbar-light bg-light " type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+<header class='Header'>
+
+<nav class='Menu navbar navbar-expand-lg'>
+    <a class="navbar-brand" href="/">LOGO</a>
+    <button class="navbar-toggler navbar-light bg-light " type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<span class="navbar-toggler-icon"></span>
+
   </button>
 
         
@@ -16,13 +17,22 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
                 </form>
             </div>
-
-            <div>
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active"><a href='/usuarios'>Entrar</a></li>
-                    <li class="nav-item"><a href='#'>Sobre</a></li>
-                </ul>
-            </div>
+            @if(Auth::guest())
+                <div>
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active"><a href='/usuarios'>Entrar</a></li>
+                        <li class="nav-item"><a href='#'>Sobre</a></li>
+                    </ul>
+                </div>
+            @else
+                <div>
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active"><a href="{{route('painel.index')}}">Painel ADM</a></li>
+                        <li class="nav-item"><a href='#'>Sobre</a></li>
+                        <li class="nav-item"><a href="{{route('sair.user')}}">Sair</a></li>
+                    </ul>
+                </div>
+            @endif
 
             
         
