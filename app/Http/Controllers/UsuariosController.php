@@ -56,26 +56,26 @@ class UsuariosController extends Controller
         //dd($dados['password']);
         
     
-            if(Auth::attempt(['email'=>Auth::user()->email , 'password'=>$dados['password']])){
-                if(!empty($dados['novsenha'])){
-                     
-                     $user = User::find(Auth::user()->id);
-                     $user->password = bcrypt($dados['novsenha']);
-    
-                     if($user->save()){
-                        Auth::logout();
-                        session()->flash('success', 'Senha atualizado');
-                        return redirect()->route('logar.user');
-                     }else{
-                         dd('erro ao atualizar senha de cliente');
-                     }
-                     
-                }else{
-                    $this->validatesenha($req,true);
-                }
+        if(Auth::attempt(['email'=>Auth::user()->email , 'password'=>$dados['password']])){
+            if(!empty($dados['novsenha'])){
+                    
+                    $user = User::find(Auth::user()->id);
+                    $user->password = bcrypt($dados['novsenha']);
+
+                    if($user->save()){
+                    Auth::logout();
+                    session()->flash('success', 'Senha atualizado');
+                    return redirect()->route('logar.user');
+                    }else{
+                        dd('erro ao atualizar senha de cliente');
+                    }
+                    
             }else{
-                $this->validatesenha($req);
+                $this->validatesenha($req,true);
             }
+        }else{
+            $this->validatesenha($req);
+        }
 
         //return redirect()->route('logar.user');
         // $url = $req->headers->get('referer');
@@ -141,6 +141,9 @@ class UsuariosController extends Controller
        
     }
 
+
+    
+    
     public function store(Request $request,$edit=false)
     {
         if($edit){
@@ -259,11 +262,7 @@ class UsuariosController extends Controller
                 'required'   => 'senha incorreta',
                 'novsenha.required'   => 'digite novamente a senha',
             ]);
-        }
-            
-
-    
-        
+        }        
     }
 
 

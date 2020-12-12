@@ -6,3 +6,9 @@
 
 </footer>
 
+ <!-- jquery -->
+ <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<!-- bootstrap -->
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<!-- chamada da função -->
+

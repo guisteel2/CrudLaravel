@@ -17,7 +17,7 @@ class CreateClientesTable extends Migration
             $table->id();
             $table->string('nome');
             $table->string('sobrenome');
-            $table->string('cpf')->unique();;
+            $table->string('cpf')->unique();
             $table->string('cep');
             $table->string('endereco');
             $table->string('bairro');
