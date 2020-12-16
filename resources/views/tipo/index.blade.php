@@ -9,6 +9,7 @@
             <tr>
                 <th>Id:</th>
                 <th>Name:</th>
+                <th>Açoes</th>
             </tr>
         </thead>
 
@@ -17,6 +18,15 @@
             <tr>
                 <td>{{$tipos->id}}</td>
                 <td>{{$tipos->descricao}}</td>
+                <td>
+                    <a href="{{route('tipo.editar',$tipos->id)}}">
+                        <button class="btn btndata btn-success" >Editar</button>
+                    </a>
+
+                    <a href="{{route('tipo.deleta',$tipos->id)}}">
+                        <button class="btn btndata btn-danger">Remover</button></td>
+                    </a>
+                </td>
             </tr>
         @endforeach    
             

@@ -3,9 +3,16 @@
     <div class="center">
         <div class="form-input">
             <label for="file-ip-1">Procurar img</label>
-            <input type="file" id="file-ip-1" accept="image/*" onchange="showPreview(event);">
+            @if ($errors->has('image'))
+                <span class="spangrid text-danger">{{ $errors->first('image') }}</span>
+            @endif
+            <input type="file" id="file-ip-1" accept="image/*" name="image" onchange="showPreview(event);">
             <div class="preview">
-            <img id="file-ip-1-preview">
+                @if(isset($produto['foto_id']))
+                    <img id="file-ip-1-preview" style="display:block" src="{{isset($produto['foto_id'])?$produto['foto_id'] :''}}" >
+                @else
+                    <img id="file-ip-1-preview" src="" >
+                @endif
             </div>
         </div>
     </div>
@@ -21,7 +28,7 @@
 
 <div class="form-group">
     <label>Valor:</label>
-    <input type="text" name="valor" class="form-control" placeholder="valor do produto" value=" {{ isset($produto->valor)  ?$produto->valor:''}}">
+    <input type="text" name="valor" class="form-control" placeholder="valor do produto" value="{{isset($produto->valor)?$produto->valor:''}}">
     @if ($errors->has('valor'))
         <span class="spangrid text-danger">{{ $errors->first('valor') }}</span>
     @endif
@@ -30,8 +37,14 @@
 <div class="form-group">
     <label>Categoria:</label>
     <select class="form-control" name="categoria_id">
-        @foreach($categorias as $categorias)
-            <option value="{{$categorias->id}}" selected="{{isset($produto->categoria_id)==$categorias->id?true:'false'}}">{{$categorias->descricao}}</option>
+        <option value="" >Selecione uma categoria</option>
+        @foreach($categorias as $key => $categoria)
+            @if(isset($produto['categoria_id']) && $produto['categoria_id'] == $categoria->id)
+                <option value="{{$categoria->id}}" selected="true">{{$categoria->descricao}}</option>
+            @else
+                <option value="{{$categoria->id}}"> {{$categoria->descricao}}</option>
+            @endif
+
         @endforeach
     </select>
     @if ($errors->has('categoria_id'))
@@ -42,8 +55,13 @@
 <div class="form-group">
     <label>Tipo:</label>
     <select class="form-control" name="tipo_id">
+        <option value="" >Selecione um tipo</option>
         @foreach($tipos as $tipos)
-            <option value="{{$tipos->id}}" selected="{{isset($produto->tipo_id)==$tipos->id?true:'false'}}">{{$tipos->descricao}}</option>
+            @if(isset($produto['tipo_id']) && $produto['tipo_id'] == $tipos->id)
+                <option value="{{$tipos->id}}" selected="true">{{$tipos->descricao}}</option>
+            @else
+                <option value="{{$tipos->id}}" >{{$tipos->descricao}}</option>
+            @endif
         @endforeach
     </select>
     @if ($errors->has('tipo'))
@@ -55,6 +73,3 @@
     <button class="btn btn-success btn-submit">Salva</button>
     <button class="btn btn-danger btn-submit">Cancelar</button>
 </div>
-
-
-                

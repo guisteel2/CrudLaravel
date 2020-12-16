@@ -5,73 +5,190 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 
 use App\Models\User;
+use App\Models\produto;
+use App\Models\foto;
 use App\Models\categoria;
 use App\Models\tipo;
+use Auth;
 
 class ProdutosController extends Controller
-{   
-    public function indexcategoria(Request $req){
-        $categoria = categoria::all();
-
-        return view('categoria.index',compact('categoria'));
-    }
-
-    public function indextipo(Request $req){
-        $tipos = tipo::all();
-
-        return view('tipo.index',compact('tipos'));
-    }
-
+{    
     public function adicionar(Request $req){
+
+        $tipos = tipo::all();
+        $categorias = categoria::all();
+
+       
         if(!empty($_POST)){
-            die('s');
+
+            $dados = $req->all();
+
+            $validatedData = $req->validate([
+                'descricao' => 'required:produto,descricao',
+                'valor' => 'required:produto,valor',
+                'categoria_id' => 'required:produto,categoria_id',
+                'tipo_id' => 'required:produto,tipo_id',
+            ], [
+                'required'   => 'campo obrigatorio',
+            ]);
+            
+            if($req->hasFile('image')){
+                $img = $req->file('image');
+                $extesion = $img->guessClientExtension();
+                $n = rand(0,100000);
+                $dir = "img/produtos_fotos";
+                $nomedaimg = $n.".".$extesion;
+                $img->move($dir,$nomedaimg);
+                $imagem['nome'] = $nomedaimg;
+                $imagem['url'] = $dir;
+            }else{
+                $validatedData = $req->validate([
+                    'image' => 'required',
+                ], [
+                    'required'   => 'img obrigatoria',
+                ]);
+            }
+
+            
+            
+            $produto = new produto();
+            $produto->descricao = $dados['descricao'];
+            $produto->valor= $dados['valor'];
+            $produto->categoria_id = $dados['categoria_id'];
+            $produto->foto_id = 1;
+            $produto->tipo_id= $dados['tipo_id'];
+            $produto->user_id= Auth::user()->id;
+
+            if($produto->save()){
+                $foto = new foto();
+                $foto->nome = $imagem['nome'];
+                $foto->url  = $imagem['url'];
+                $foto->referencia = $produto->id;
+
+                if($foto->save()){
+                    $produto->foto_id = $foto->id;
+                    $produto->save();
+                    session()->flash('success', 'produto criado:'.$produto->descricao);
+                    return redirect()->route('produtos.lista');
+
+                }else{
+                    dd('erro ao salvar a foto');
+                }
+                
+            }else{
+                dd('erro ao salvar produto');
+            }
+            
+
         }else{
-            $tipos = tipo::all();
-            $categorias = categoria::all();
+            
             return view('produtos.adicionar', compact('tipos','categorias'));
         }
     }
 
-    public function categoriaadicionar(Request $req){
-        $this->validar($req);
-
-        $dados = $req->all();
+    public function editar($id , Request $req){
+        $produto = produto::find($id);
+        $foto = DB::table('fotos')->where('referencia','=',$produto->id)->get();
         
-        if(!empty($dados['categoria'])){
-            $categoria = new categoria;
-            $categoria->descricao = $dados['categoria'];
-    
-            if($categoria->save()){
-                session()->flash('success', 'Categoria de produto criado:'.$categoria->descricao);
-            }else{
-                $this->validar($req);
-            }
-        }
+        $tipos = tipo::all();
+        $categorias = categoria::all();
 
-         $url = $req->headers->get('referer');
-         return redirect($url);
+        
+
+        if(!empty($_POST)){
+            $dados = $req->all();
+
+            $validatedData = $req->validate([
+                'descricao' => 'required:produto,descricao',
+                'valor' => 'required:produto,valor',
+                'categoria_id' => 'required:produto,categoria_id',
+                'tipo_id' => 'required:produto,tipo_id',
+            ], [
+                'required'   => 'campo obrigatorio',
+            ]);
+            
+            if($req->hasFile('image')){
+                $img = $req->file('image');
+                $extesion = $img->guessClientExtension();
+                $n = rand(0,100000);
+                $dir = "img/produtos_fotos";
+                $nomedaimg = $n.".".$extesion;
+                $img->move($dir,$nomedaimg);
+                $imagem['nome'] = $nomedaimg;
+                $imagem['url'] = $dir;
+            }
+
+            $produto->descricao = $dados['descricao'];
+            $produto->valor= $dados['valor'];
+            $produto->categoria_id = $dados['categoria_id'];
+            $produto->foto_id = $produto->foto_id;
+            $produto->tipo_id= $dados['tipo_id'];
+            $produto->user_id= Auth::user()->id;
+
+            if($produto->save()){
+                if(isset($img)){
+
+                    $foto = foto::find($produto->foto_id);
+                    $foto->nome = $imagem['nome'];
+                    $foto->url  = $imagem['url'];
+                    $foto->referencia = $produto->id;
+
+                    if($foto->save()){
+                        $produto->foto_id = $foto->id;
+                        $produto->save();
+                    }else{
+                        dd('erro ao salvar a foto');
+                    }
+                }
+            session()->flash('success', 'produto editado:'.$produto->descricao);
+            return redirect()->route('produtos.lista');
+            }else{
+                dd('erro ao salvar produto');
+            }
+            
+
+        }else{
+            
+            $produto->foto_id = "/".$foto[0]->url."/".$foto[0]->nome;
+            return view('produtos.editar', compact('produto','tipos','categorias'));
+
+        }
     }
 
-    public function tipoadicionar(Request $req){
-        $this->validar($req,true);
+    public function deletar($id , Request $req){
+        $produto = produto::find($id);
+        $foto = foto::find($produto->foto_id);
 
-        $dados = $req->all();
+        session()->flash('success', 'produto Deletado :'.$produto->descricao);
+            
+        $foto->delete();
+        $produto->delete();
         
-        if(!empty($dados['tipo'])){
-            $tipo = new tipo;
-            $tipo->descricao = $dados['tipo'];
-    
-            if($tipo->save()){
-                session()->flash('success', 'Tipo de produto criado:'.$tipo->descricao);
-            }else{
-                $this->validar($req,true);
-            }
-         }
-         $url = $req->headers->get('referer');
-         return redirect($url);
-        
+        return redirect()->route('produtos.lista');
+
+    }
+
+    public function lista(Request $req){
+        $user_id =  Auth::user()->id;   
+
+        $produtos = DB::table('produtos')->orderBy('id', 'desc')->where('user_id','=', $user_id)->get();
+        // dd($produtos);
+        foreach($produtos as $key => $produtos){
+            $prod[$key] = $produtos;
+            $foto = DB::table('fotos')->where('referencia','=',$produtos->id)->get();
+                $prod[$key]->foto_id = "/".$foto[0]->url."/".$foto[0]->nome;
+            $tipo = DB::table('tipos')->where('id','=',$produtos->tipo_id)->get();
+                $prod[$key]->tipo_id = $tipo[0]->descricao;
+            $categoria = DB::table('categorias')->where('id','=',$produtos->categoria_id)->get();
+                $prod[$key]->categoria_id = $categoria[0]->descricao;
+        }
+      
+  
+        return view('produtos.lista',compact('prod'));
     }
 
     public function validar($request, $ax = null){
@@ -93,6 +210,21 @@ class ProdutosController extends Controller
             ]);
         }
               
+    }
+
+    public function ValidaFormProduto(Request $request){
+       
+        $validatedData = $request->validate([
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
+            'descricao' => 'required',
+            'valor' => 'required',
+            'categoria_id' => 'required',
+            'tipo_id' => 'required',
+            'user_id' => 'required',
+        ], [
+            'required'   => 'campo obrigatorio',
+        ]);
+        
     }
 
 }

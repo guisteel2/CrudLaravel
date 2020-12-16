@@ -37,17 +37,26 @@ Route::post('/cadastrar/usuario',['as' => 'cadastro.cliente', 'uses' => 'App\Htt
 //grupo de para autenticação
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/painel/index',      ['as' => 'painel.index',       'uses' => 'App\Http\Controllers\PainelADM\PaineladmController@index']);
+
     Route::get('/produtos/adicionar',['as' => 'produtos.adicionar', 'uses' => 'App\Http\Controllers\ProdutosController@adicionar']);
+    Route::post('/produtos/adicionar',['as' => 'produtos.adicionar', 'uses' => 'App\Http\Controllers\ProdutosController@adicionar']);
+    
+    Route::post('/categoria/adicionar/',['as' => 'categoria.adicionar', 'uses' => 'App\Http\Controllers\CategoriasController@categoriaadicionar']);
+    Route::get('/categoria/index/',['as' => 'categoria.index', 'uses' => 'App\Http\Controllers\CategoriasController@indexcategoria']);
+    Route::post('/categoria/editar/{id}',['as' => 'categoria.editar', 'uses' => 'App\Http\Controllers\CategoriasController@editarcategoria']);
+    Route::get('/categoria/deleta/{id}',['as' => 'categoria.deleta', 'uses' => 'App\Http\Controllers\CategoriasController@deletarcategoria']);
 
-    Route::post('/produtos/adicionar/categoria',['as' => 'categoria.adicionar', 'uses' => 'App\Http\Controllers\ProdutosController@categoriaadicionar']);
-    Route::get('/produtos/index/categoria',['as' => 'categoria.index', 'uses' => 'App\Http\Controllers\ProdutosController@indexcategoria']);
+    Route::get('/tipo/tipo/',['as' => 'tipo.index', 'uses' => 'App\Http\Controllers\TiposController@indextipo']);
+    Route::post('/tipo/adicionar/',['as' => 'tipo.adicionar', 'uses' => 'App\Http\Controllers\TiposController@tipoadicionar']);
+    Route::get('/tipo/editar/{id}',['as' => 'tipo.editar', 'uses' => 'App\Http\Controllers\TiposController@editartipo']);
+    Route::get('/tipo/deleta/{id}',['as' => 'tipo.deleta', 'uses' => 'App\Http\Controllers\TiposController@deletartipo']);
+    
 
-    Route::post('/produtos/adicionar/tipo',['as' => 'tipo.adicionar', 'uses' => 'App\Http\Controllers\ProdutosController@tipoadicionar']);
-    Route::get('/produtos/index/tipo',['as' => 'tipo.index', 'uses' => 'App\Http\Controllers\ProdutosController@indextipo']);
-
+    Route::get('/produtos/lista',['as' => 'produtos.lista', 'uses' => 'App\Http\Controllers\ProdutosController@lista']);
     Route::post('/produtos/salvar',  ['as' => 'produtos.salva',     'uses' => 'App\Http\Controllers\PainelADM\PaineladmController@salvar']);
-    Route::put('/produtos/editar',   ['as' => 'produtos.editar',    'uses' => 'App\Http\Controllers\PainelADM\PaineladmController@editar']);
-    Route::get('/produtos/deletar',  ['as' => 'produtos.cliente',   'uses' => 'App\Http\Controllers\PainelADM\PaineladmController@deletar']);
+    Route::get('/produtos/editar/{id}', ['as' => 'produtos.editar', 'uses' => 'App\Http\Controllers\ProdutosController@editar']);
+    Route::post('/produtos/editar/{id}', ['as' => 'produtos.editar','uses' => 'App\Http\Controllers\ProdutosController@editar']);
+    Route::get('/produtos/deletar/{id}',  ['as' => 'produtos.delete',   'uses' => 'App\Http\Controllers\ProdutosController@deletar']);
 
     
 

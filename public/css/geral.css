@@ -119,6 +119,18 @@ html, body {height:100%;}
     margin: 5px;
   }
 
+
+  .btndata{
+    color: white;
+    max-width: 87px;
+    margin-bottom: 3px; 
+    min-width: 87px;
+  }
+
+  .formlist{
+    overflow: auto !important;
+  }
+
 .footer{
     display: flex;
     background-color: black;

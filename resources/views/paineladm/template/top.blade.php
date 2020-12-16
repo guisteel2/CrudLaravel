@@ -28,7 +28,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                    <a class="dropdown-item" href="#">Seus Produtos</a>
+                    <a class="dropdown-item" href="{{route('produtos.lista')}}">Seus Produtos</a>
 
                     <a class="dropdown-item" href="{{route('produtos.adicionar')}}">Adicionar Produto</a>
 
@@ -115,7 +115,7 @@
     </div>
 </div>
 
-<<div class="modal fade" id="myModal2" role="dialog">
+<div class="modal fade" id="myModal2" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">

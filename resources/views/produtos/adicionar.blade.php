@@ -6,9 +6,9 @@
     <div class="card">
         <h1 class="titulo" style="text-align: center;">Cadastro de Produto</h1> 
         <div class="card-body">
-            <form method="POST" action="{{route('produtos.adicionar') }}"  method="post" enctype="multipart/form-data">
+            <form method="POST" action="{{route('produtos.adicionar') }}"  method="post" enctype="multipart/form-data" >
                 {{ csrf_field() }}
-                @include('produtos.formproduto');
+                @include('produtos.formproduto')
             </form>
         </div>
     </div>

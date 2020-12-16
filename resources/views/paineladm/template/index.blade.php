@@ -59,16 +59,36 @@
             </script>
         @endif
 
+        @if($errors->has('categoriamod'))
+            <script type="text/javascript">
+                alert('erro na atualizar da categoria, por favor digita nome da categoria')
+            </script>
+        @endif
+
         <script type="text/javascript">
             $(document).ready(function() {
-                $('#example').DataTable();
+                $('#example').DataTable({"order": [[0, "desc"]]});
                 $("#example_length").css("display","none");
                 $("#example_filter").css("display","none");
                 $("#example_info").css("display","none");
                 $("#example_paginate").css("display","none");
+                
+                
+                $('#myEdite').on('show.bs.modal', function (event) {                                                     
+                    var button = $(event.relatedTarget);
+                    var recipientId    = button.data('id');                                                             
+                    var recipientNome = button.data('nome');
+                    $("#nomecat").text("Produto para edição:"+recipientNome);
+                    $("#formCat").attr("action","/categoria/editar/"+recipientId);
+                    
+                    $("#eddcat").attr("data-id", recipientId);
+                    $("#eddcat").attr("data-nome", recipientId);
+                });
+                
             } );
-        </script>
 
+        </script>
+    
     </body>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
