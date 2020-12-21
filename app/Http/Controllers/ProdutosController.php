@@ -175,16 +175,19 @@ class ProdutosController extends Controller
     public function lista(Request $req){
         $user_id =  Auth::user()->id;   
 
-        $produtos = DB::table('produtos')->orderBy('id', 'desc')->where('user_id','=', $user_id)->get();
-        // dd($produtos);
+        $produtos = Auth::user()->addcprodutos()->get();
+
         foreach($produtos as $key => $produtos){
+
+            $foto       =  $produtos->foto()->get();
+            $tipo       =  $produtos->tipo()->get();
+            $categoria  =  $produtos->categoria()->get();
+            
             $prod[$key] = $produtos;
-            $foto = DB::table('fotos')->where('referencia','=',$produtos->id)->get();
-                $prod[$key]->foto_id = "/".$foto[0]->url."/".$foto[0]->nome;
-            $tipo = DB::table('tipos')->where('id','=',$produtos->tipo_id)->get();
-                $prod[$key]->tipo_id = $tipo[0]->descricao;
-            $categoria = DB::table('categorias')->where('id','=',$produtos->categoria_id)->get();
-                $prod[$key]->categoria_id = $categoria[0]->descricao;
+            $prod[$key]->foto_id = "/".$foto[0]->url."/".$foto[0]->nome;
+            $prod[$key]->tipo_id = $tipo[0]->descricao;
+            $prod[$key]->categoria_id = $categoria[0]->descricao;
+            
         }
       
   

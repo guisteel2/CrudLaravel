@@ -43,6 +43,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function addcliente(){
+        return $this->hasOne(cliente::class, 'id','cliente_id');
+    }
+
+    public function addcprodutos(){
+        return $this->hasMany(produto::class, 'user_id','id');
+    }
+
+
     public function ignore($user){
         dd(Auth::user()->email);
         if($user){
