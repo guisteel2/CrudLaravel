@@ -10,4 +10,8 @@ class categoria extends Model
     use HasFactory;
 
     protected $fillable = ['descricao',];
+
+    public function gettipos(){
+        return $this->hasOne(tipo::class, 'categoria_id','id');
+    }
 }

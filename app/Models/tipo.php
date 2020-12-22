@@ -9,5 +9,5 @@ class tipo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['descricao',];
+    protected $fillable = ['categoria_id','descricao',];
 }

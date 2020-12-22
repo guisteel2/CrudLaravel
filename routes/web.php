@@ -37,6 +37,8 @@ Route::post('/cadastrar/usuario',['as' => 'cadastro.cliente', 'uses' => 'App\Htt
 //grupo de para autenticação
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/painel/index',      ['as' => 'painel.index',       'uses' => 'App\Http\Controllers\PainelADM\PaineladmController@index']);
+    
+    Route::match(['get', 'post'],'/categoria/getcategoria/{id?}',['as' => 'getcategoria', 'uses' => 'App\Http\Controllers\CategoriasController@getcategoria']);
 
     Route::get('/produtos/adicionar',['as' => 'produtos.adicionar', 'uses' => 'App\Http\Controllers\ProdutosController@adicionar']);
     Route::post('/produtos/adicionar',['as' => 'produtos.adicionar', 'uses' => 'App\Http\Controllers\ProdutosController@adicionar']);

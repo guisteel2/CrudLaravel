@@ -9,13 +9,14 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
 use App\Models\categoria;
+use App\Models\tipo;
+
 use Auth;
 
 class CategoriasController extends Controller
 {
     public function indexcategoria(Request $req){
         $categoria = categoria::all();
-
         return view('categoria.index',compact('categoria'));
     }
     
@@ -41,6 +42,7 @@ class CategoriasController extends Controller
     }
 
     public function deletarcategoria($id){
+
         $categoria = categoria::find($id);
     
         session()->flash('success', 'Categoria Deletado :'.$categoria->descricao);
@@ -93,4 +95,18 @@ class CategoriasController extends Controller
               
     }
 
+    public function getcategoria($id = null){
+        
+        if($id){
+            $categoria = categoria::find($id);
+            $tipo = $categoria->gettipos()->get();
+            $tipo = json_encode($tipo);
+            return $tipo;
+        }else{
+            $categoria = categoria::all();
+            $categoria = json_encode($categoria);
+            return $categoria;
+        }
+    }
+    
 }

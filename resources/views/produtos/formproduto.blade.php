@@ -36,15 +36,14 @@
 
 <div class="form-group">
     <label>Categoria:</label>
-    <select class="form-control" name="categoria_id">
-        <option value="" >Selecione uma categoria</option>
+    <select class="form-control" name="categoria_id" onchange="getCategorias(this.value)">
+        <option value="">Selecione uma categoria</option>
         @foreach($categorias as $key => $categoria)
             @if(isset($produto['categoria_id']) && $produto['categoria_id'] == $categoria->id)
                 <option value="{{$categoria->id}}" selected="true">{{$categoria->descricao}}</option>
             @else
                 <option value="{{$categoria->id}}"> {{$categoria->descricao}}</option>
             @endif
-
         @endforeach
     </select>
     @if ($errors->has('categoria_id'))
@@ -54,16 +53,11 @@
                 
 <div class="form-group">
     <label>Tipo:</label>
-    <select class="form-control" name="tipo_id">
+    
+    <select id="tipoform_id" class="form-control" name="tipo_id">
         <option value="" >Selecione um tipo</option>
-        @foreach($tipos as $tipos)
-            @if(isset($produto['tipo_id']) && $produto['tipo_id'] == $tipos->id)
-                <option value="{{$tipos->id}}" selected="true">{{$tipos->descricao}}</option>
-            @else
-                <option value="{{$tipos->id}}" >{{$tipos->descricao}}</option>
-            @endif
-        @endforeach
     </select>
+
     @if ($errors->has('tipo'))
         <span class="spangrid  text-danger">{{ $errors->first('tipo') }}</span>
     @endif

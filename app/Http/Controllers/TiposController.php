@@ -8,27 +8,26 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
+use App\Models\categoria;
 use App\Models\tipo;
 use Auth;
 
 class TiposController extends Controller
 {
     public function indextipo(Request $req){
-        $tipos = tipo::all();
+        $tipos = tipo::find();
 
-        return view('tipo.index',compact('tipos'));
+        return view('tipo.index',compact('tipos','categoria'));
     } 
-    public function editartipo(Request $req){
-    }
-    public function deletartipo(Request $req){
-    }
+
     public function tipoadicionar(Request $req){
         $this->validar($req,true);
 
         $dados = $req->all();
-        
+
         if(!empty($dados['tipo'])){
             $tipo = new tipo;
+            $tipo->categoria_id = $dados['categoria_id'];
             $tipo->descricao = $dados['tipo'];
     
             if($tipo->save()){
@@ -42,10 +41,19 @@ class TiposController extends Controller
         
     }
 
+    public function editartipo(Request $req){
+    }
+
+    public function deletartipo(Request $req){
+    }
+
+    
+
     public function validar($request, $ax = null){
 
         if($ax){
             $validatedData = $request->validate([
+            'categoria_id' => 'required',
             'tipo'      => 'required|unique:tipos,descricao',
             ], [
                 'required'   => 'campo de tipo obrigatorio',
@@ -54,10 +62,11 @@ class TiposController extends Controller
 
         }else{
             $validatedData = $request->validate([
-                'categoria' => 'required|unique:categorias,descricao',
+                'categoria_id' => 'required',
+                'tipo' => 'required',
             ], [
                 'required'   => 'campo de categoria obrigatorio',
-                'categoria.unique'   => 'Categoria ja existe',
+                'categoria_id.unique'   => 'Categoria ja existe',
             ]);
         }
               

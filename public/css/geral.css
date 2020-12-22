@@ -38,15 +38,6 @@ html, body {height:100%;}
     padding: 20px;
 }
 
-.contender{
-    flex: 1;
-}
-.contender .div{
-    display: flex;
-    text-align: center;
-    align-content: center;
-}
-
 .card{
     margin: auto;
     width: 460px;
@@ -74,6 +65,15 @@ html, body {height:100%;}
 
 }
 
+.contender{
+  flex: 1;
+  text-align: center;
+}
+.contender .div{
+  display: flex;
+  text-align: center;
+  align-content: center;
+}
 
 .contender .login{
     display: flex;

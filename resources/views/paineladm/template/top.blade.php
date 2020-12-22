@@ -37,7 +37,7 @@
                         <a class="dropdown-item" href="{{route('categoria.index')}}">Lista categoria para o produto</a>
                         
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" data-toggle="modal" data-target="#myModal2" href="#">Adicionar Tipo de Produto</a>
+                        <a onclick="getCategoria()" id="btngetcate" class="dropdown-item" data-toggle="modal" data-target="#myModal2" href="#">Adicionar Tipo de Categoria</a>
                         <a class="dropdown-item" href="{{route('tipo.index')}}">Lista de Tipos Categoria</a>
                     </div>
 
@@ -123,17 +123,32 @@
                                         {{ csrf_field() }}
 
                 <div class="modal-header">
-                <h4 class="modal-title">Tipo de produto</h4>
+                <h4 class="modal-title">Tipo de Categoria</h4>
                 </div>
+                
 
-                <div class="modal-body">          
-                        <div class="form-group">
-                            <strong>Nome do Tipo do produto:</strong>
-                            <input type="text" name="tipo" class="form-control" placeholder="Digite o nome">
-                            @if($errors->has('tipo'))
-                                <span class="spangrid text-danger">{{ $errors->first('tipo') }}</span>
-                            @endif
-                        </div>
+                <div class="modal-body">     
+
+                    <div class="form-group">
+                        <strong>Selecione a categoria:</strong>
+                        <select class="form-control" id="selectform" name="categoria_id">
+                        <option nome="categoria_id" value="" selected>Selecione a categoria</option>  
+                        </select>
+                            @if($errors->has('categoria_id'))
+                                <script type="text/javascript">
+                                        $('#tipo').click();
+                                </script>
+                            <span class="spangrid text-danger">{{ $errors->first('categoria_id') }}</span>
+                            @endif          
+                    </div>     
+
+                    <div class="form-group">
+                        <strong>Nome do Tipo da categoria:</strong>
+                        <input type="text" name="tipo" class="form-control" placeholder="Digite o nome">
+                        @if($errors->has('tipo'))
+                            <span class="spangrid text-danger">{{ $errors->first('tipo') }}</span>
+                        @endif
+                    </div>
                 </div>
 
                 <div class="modal-footer">

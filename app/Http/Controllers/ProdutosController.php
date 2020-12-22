@@ -27,14 +27,7 @@ class ProdutosController extends Controller
 
             $dados = $req->all();
 
-            $validatedData = $req->validate([
-                'descricao' => 'required:produto,descricao',
-                'valor' => 'required:produto,valor',
-                'categoria_id' => 'required:produto,categoria_id',
-                'tipo_id' => 'required:produto,tipo_id',
-            ], [
-                'required'   => 'campo obrigatorio',
-            ]);
+            $this->validaProduto($req);
             
             if($req->hasFile('image')){
                 $img = $req->file('image');
@@ -82,34 +75,23 @@ class ProdutosController extends Controller
             }else{
                 dd('erro ao salvar produto');
             }
-            
-
         }else{
-            
             return view('produtos.adicionar', compact('tipos','categorias'));
         }
     }
 
     public function editar($id , Request $req){
+
         $produto = produto::find($id);
-        $foto = DB::table('fotos')->where('referencia','=',$produto->id)->get();
-        
-        $tipos = tipo::all();
+        $foto    = $produto->foto()->get();
+        $tipos   = tipo::all();
         $categorias = categoria::all();
-
+        //$foto = DB::table('fotos')->where('referencia','=',$produto->id)->get();
         
-
         if(!empty($_POST)){
             $dados = $req->all();
 
-            $validatedData = $req->validate([
-                'descricao' => 'required:produto,descricao',
-                'valor' => 'required:produto,valor',
-                'categoria_id' => 'required:produto,categoria_id',
-                'tipo_id' => 'required:produto,tipo_id',
-            ], [
-                'required'   => 'campo obrigatorio',
-            ]);
+            $this->validaProduto($req);
             
             if($req->hasFile('image')){
                 $img = $req->file('image');
@@ -144,15 +126,13 @@ class ProdutosController extends Controller
                         dd('erro ao salvar a foto');
                     }
                 }
-            session()->flash('success', 'produto editado:'.$produto->descricao);
-            return redirect()->route('produtos.lista');
+                session()->flash('success', 'produto editado:'.$produto->descricao);
+                return redirect()->route('produtos.lista');
             }else{
                 dd('erro ao salvar produto');
             }
-            
-
         }else{
-            
+
             $produto->foto_id = "/".$foto[0]->url."/".$foto[0]->nome;
             return view('produtos.editar', compact('produto','tipos','categorias'));
 
@@ -162,9 +142,11 @@ class ProdutosController extends Controller
     public function deletar($id , Request $req){
         $produto = produto::find($id);
         $foto = foto::find($produto->foto_id);
-
+        $urlDelete= "/".$foto->url."/".$foto->nome;
+       
+        unlink(public_path($urlDelete));
         session()->flash('success', 'produto Deletado :'.$produto->descricao);
-            
+
         $foto->delete();
         $produto->delete();
         
@@ -173,61 +155,56 @@ class ProdutosController extends Controller
     }
 
     public function lista(Request $req){
-        $user_id =  Auth::user()->id;   
+        $user_id =  Auth::user()->id; 
+        $categoria = categoria::all();  
 
         $produtos = Auth::user()->addcprodutos()->get();
 
-        foreach($produtos as $key => $produtos){
+        if(count($produtos) >= 1){
+            foreach($produtos as $key => $produtos){
 
-            $foto       =  $produtos->foto()->get();
-            $tipo       =  $produtos->tipo()->get();
-            $categoria  =  $produtos->categoria()->get();
-            
-            $prod[$key] = $produtos;
-            $prod[$key]->foto_id = "/".$foto[0]->url."/".$foto[0]->nome;
-            $prod[$key]->tipo_id = $tipo[0]->descricao;
-            $prod[$key]->categoria_id = $categoria[0]->descricao;
-            
-        }
-      
-  
-        return view('produtos.lista',compact('prod'));
-    }
-
-    public function validar($request, $ax = null){
-
-        if($ax){
-            $validatedData = $request->validate([
-            'tipo'      => 'required|unique:tipos,descricao',
-            ], [
-                'required'   => 'campo de tipo obrigatorio',
-                'tipo.unique'   => 'tipo ja existe',
-            ]);
-
+                $foto       =  $produtos->foto()->get();
+                $tipo       =  $produtos->tipo()->get();
+                $categoria  =  $produtos->categoria()->get();
+                
+                $prod[$key] = $produtos;
+                $prod[$key]->foto_id = "/".$foto[0]->url."/".$foto[0]->nome;
+                $prod[$key]->tipo_id = $tipo[0]->descricao;
+                $prod[$key]->categoria_id = $categoria[0]->descricao;
+                
+            }
         }else{
-            $validatedData = $request->validate([
-                'categoria' => 'required|unique:categorias,descricao',
-            ], [
-                'required'   => 'campo de categoria obrigatorio',
-                'categoria.unique'   => 'Categoria ja existe',
-            ]);
+            $prod = ''; 
         }
-              
+        
+      
+        return view('produtos.lista',compact('prod','categoria'));
     }
 
-    public function ValidaFormProduto(Request $request){
-       
-        $validatedData = $request->validate([
-            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
-            'descricao' => 'required',
-            'valor' => 'required',
-            'categoria_id' => 'required',
-            'tipo_id' => 'required',
-            'user_id' => 'required',
+    public function validaProduto(Request $req){
+        $validatedData = $req->validate([
+            'descricao' => 'required:produto,descricao',
+            'valor' => 'required:produto,valor',
+            'categoria_id' => 'required:produto,categoria_id',
+            'tipo_id' => 'required:produto,tipo_id',
         ], [
             'required'   => 'campo obrigatorio',
         ]);
-        
     }
+
+    // public function ValidaFormProduto(Request $request){
+       
+    //     $validatedData = $request->validate([
+    //         'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=100,min_height=100,max_width=1000,max_height=1000',
+    //         'descricao' => 'required',
+    //         'valor' => 'required',
+    //         'categoria_id' => 'required',
+    //         'tipo_id' => 'required',
+    //         'user_id' => 'required',
+    //     ], [
+    //         'required'   => 'campo obrigatorio',
+    //     ]);
+        
+    // }
 
 }
