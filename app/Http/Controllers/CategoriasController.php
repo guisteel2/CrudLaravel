@@ -22,15 +22,17 @@ class CategoriasController extends Controller
     
     public function editarcategoria($id, Request $req){
         $categoria = categoria::find($id);
-
+        
         $validatedData = $req->validate([
-            'categoriamod'      => 'required',
+            'categoriamod'      => 'required|unique:categorias,descricao',
             ], [
+                'unique' => 'Categoria ja existe',
                 'required'   => 'campo de categoria obrigatorio',
             ]);
 
         $dados = $req->all();
-        $categoria->descricao = $dados['categoria'];
+        
+        $categoria->descricao = $dados['categoriamod'];
 
         $categoria->save();
 

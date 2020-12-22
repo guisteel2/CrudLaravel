@@ -60,7 +60,7 @@
 
         @if($errors->has('categoriamod'))
             <script type="text/javascript">
-                alert('erro na atualizar da categoria, por favor digita nome da categoria')
+                alert('categoria ja existe, por favor abra de novo a categoria e selecione outro nome')
             </script>
         @endif
 
@@ -77,12 +77,51 @@
                     var button = $(event.relatedTarget);
                     var recipientId    = button.data('id');                                                             
                     var recipientNome = button.data('nome');
+
                     $("#nomecat").text("Produto para edição:"+recipientNome);
                     $("#formCat").attr("action","/categoria/editar/"+recipientId);
                     
                     $("#eddcat").attr("data-id", recipientId);
                     $("#eddcat").attr("data-nome", recipientId);
                 });
+
+                $('#editartipo').on('show.bs.modal', function (event) {                                                     
+                    var button      = $(event.relatedTarget);
+                    var nome        =   button.data('nome'); 
+                    var tipoid      = button.data('tipoid');                                                             
+                    var categoriaid = button.data('catid');
+                    
+                    $("#formdotipo").attr("action","/tipo/editar"+"/"+categoriaid);
+                    $("#tituloeditecategoria").text("Tipo de categoria para edição:"+nome);
+                    
+                    $.ajax({
+                        'processing': true, 
+                        'serverSide': true,
+                        type: "get",
+                        url: "{{route('getcategoria')}}",
+                        datatype: "json",
+                        success: function(categoria) {
+                            $('option', '#selectformtipo').remove();
+                            categoria= JSON.parse(categoria);
+                            if(categoria.length >=0 ){
+            
+                                for (i = 0; i <= categoria.length; i++) {
+                                    if(categoriaid == categoria[i]['id']){
+                                        $('#selectformtipo').append('<option nome="categoria_id" selected value="'+categoria[i]['id']+'">' + categoria[i]['descricao'] + '</option>'
+                                        );
+                                    }else{
+                                        $('#selectformtipo').append(
+                                            '<option nome="categoria_id"  value="'+categoria[i]['id']+'">' + categoria[i]['descricao'] + '</option>'
+                                        );
+                                    }
+                                    
+                                }
+                            }
+                            
+                        }
+            
+                    });
+            });
                 
             } );
 
@@ -96,6 +135,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 
     <script>
+
+        function gettipo(id = null){
+            
+            $.ajax({
+                'processing': true, 
+                'serverSide': true,
+                type: "get",
+                url: "{{route('getcategoria')}}"+"/"+id,
+                datatype: "json",
+                success: function(categoria) {
+                    $('option', '#selectformtipo').remove();
+                    categoria= JSON.parse(categoria);
+                    if(categoria.length >=0 ){
+                
+                        for (i = 0; i <= categoria.length; i++) {
+                            $('#selectformtipo').append('<option nome="categoria_id" value="'+selectformtipo[i]['id']+'">' + selectformtipo[i]['descricao'] + '</option>');
+                        }
+                    }
+                    
+                }
+    
+            });
+        }
+        
+        function addctipos(){
+            $('#btngetcate').click();
+        }
+
+        function chamaCategoria(){
+             $('#btngetcate').click();
+        }
+
         function getCategorias(id = null){
             
             $.ajax({
@@ -107,9 +178,8 @@
                 success: function(tipos) {
                     $('option', '#tipoform_id').remove();
                     tipos= JSON.parse(tipos);
-                    
                     if(tipos.length >=0 ){
-                        $('option', '#tipoform_id').remove();
+                        // $('option', '#tipoform_id').remove();
                         $('#tipoform_id').append('<option value="">Selecione o tipo</option>');
 
                         for (i = 0; i <= tipos.length; i++) {

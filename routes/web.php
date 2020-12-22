@@ -45,12 +45,12 @@ Route::group(['middleware' => 'auth'], function(){
     
     Route::post('/categoria/adicionar/',['as' => 'categoria.adicionar', 'uses' => 'App\Http\Controllers\CategoriasController@categoriaadicionar']);
     Route::get('/categoria/index/',['as' => 'categoria.index', 'uses' => 'App\Http\Controllers\CategoriasController@indexcategoria']);
-    Route::post('/categoria/editar/{id}',['as' => 'categoria.editar', 'uses' => 'App\Http\Controllers\CategoriasController@editarcategoria']);
+    Route::match(['get', 'post'],'/categoria/editar/{id}',['as' => 'categoria.editar', 'uses' => 'App\Http\Controllers\CategoriasController@editarcategoria']);
     Route::get('/categoria/deleta/{id}',['as' => 'categoria.deleta', 'uses' => 'App\Http\Controllers\CategoriasController@deletarcategoria']);
 
     Route::get('/tipo/tipo/',['as' => 'tipo.index', 'uses' => 'App\Http\Controllers\TiposController@indextipo']);
     Route::post('/tipo/adicionar/',['as' => 'tipo.adicionar', 'uses' => 'App\Http\Controllers\TiposController@tipoadicionar']);
-    Route::get('/tipo/editar/{id}',['as' => 'tipo.editar', 'uses' => 'App\Http\Controllers\TiposController@editartipo']);
+    Route::match(['get', 'post'],'/tipo/editar/{id}',['as' => 'tipo.editar', 'uses' => 'App\Http\Controllers\TiposController@editartipo']);
     Route::get('/tipo/deleta/{id}',['as' => 'tipo.deleta', 'uses' => 'App\Http\Controllers\TiposController@deletartipo']);
     
 

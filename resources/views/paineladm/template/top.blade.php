@@ -33,7 +33,7 @@
                     <a class="dropdown-item" href="{{route('produtos.adicionar')}}">Adicionar Produto</a>
 
                     <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" data-toggle="modal" data-target="#myModal1" href="#">Adicionar categoria para os produtos</a>
+                        <a class="dropdown-item" id="btngetcate" data-toggle="modal" data-target="#myModal1" href="#">Adicionar categoria para os produtos</a>
                         <a class="dropdown-item" href="{{route('categoria.index')}}">Lista categoria para o produto</a>
                         
                     <div class="dropdown-divider"></div>
@@ -119,7 +119,7 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <form method="POST" action="{{route('tipo.adicionar')}}">
+            <form id="formtipocat" method="POST" action="{{route('tipo.adicionar')}}">
                                         {{ csrf_field() }}
 
                 <div class="modal-header">
@@ -159,6 +159,8 @@
         </div>
     </div>
 </div>
+
+
 
 </header>
 
